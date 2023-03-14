@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Delete schema "{{ object.name }}"</h1>
+  <form method="post">
+    {% csrf_token %}
+    <p>Are you sure you want to delete this schema ?</p>
+    <input type="submit" value="Delete">
+    <a href="{% url 'data_list' %}">Cancel</a>
+  </form>
+{% endblock %}

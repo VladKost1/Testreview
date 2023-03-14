@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Data Columns</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Column Type</th>
+        <th>Data Schema</th>
+        <th>Order Index</th>
+        <th>Range Start</th>
+        <th>Range End</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for data_column in data_columns %}
+        <tr>
+          <td><a href="{% url 'data_column_detail' data_column.pk %}">{{ data_column.name }}</a></td>
+          <td>{{ data_column.column_type }}</td>
+          <td>{{ data_column.data_schema }}</td>
+          <td>{{ data_column.order_index }}</td>
+          <td>{{ data_column.range_start }}</td>
+          <td>{{ data_column.range_end }}</td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="6">No data columns found.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="/data_create" class="btn btn-primary">Create Data Column</a>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container" style= "margin-left: 20px">
+    <br>
+  <h2>Data schemas</h2>
+    <button type="button" class="btn btn-success" style="position: fixed; top: 81px; left: 1026px;"><a style="color:white" href="data_create">New schema</a></button>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr style="background-color:wheat ">
+        <th>#</th>
+        <th>title</th>
+        <th>Modified</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for schema in schemas %}
+        <tr style="background-color:whitesmoke">
+            <td>{{ schema.id }}</td>
+            <td><a href="{% url 'data_detail' schema.pk %}"> {{ schema.name }}</a></td>
+            <td>{{ schema.create_datetime|date:'Y-m-d' }}</td>
+            <form method="POST">
+                {% csrf_token %}
+            <td><a href="{% url 'data_column_create' schema.id %}">Add Column</a> <a style="color: red" href="{% url 'data_delete' schema.pk %}">Delete</a></td>
+            </form>
+
+
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="6">No data columns found.</td>
+        </tr>
+      {% endfor %}
+{% endblock %}

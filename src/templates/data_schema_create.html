@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Create Data Schema</h1>
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label class="form-label">Schema Name</label>
+      {{ form.name }}
+    </div>
+
+    <hr>
+
+    <h2>Data Columns</h2>
+
+    <table class="table">
+    {{ data_columns.management_form }}
+    {% for data_column_form in data_columns %}
+    <tr>
+        <td>
+            <div class="mb-3">
+                <label class="form-label">Column Name</label>
+                {{ data_column_form.column_name }}
+            </div>
+        </td>
+        <td>
+            <div class="mb-3">
+                <label class="form-label">Column Type</label>
+                {{ data_column_form.column_type }}
+            </div>
+        </td>
+        <td>
+        <div class="mb-3">
+            <label class="form-label">Order index</label>
+            {{ data_column_form.order_index }}
+        </div>
+        </td>
+        <td> Range Start: {{ data_column_form.range_start }}</td>
+        <td> Range End:{{ data_column_form.range_end }}</td>
+    </tr>
+    {% endfor %}
+    </table>
+      <button type="submit" class="btn btn-primary">Create Schema</button>
+  </form>
+{% endblock %}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+</head>
+<style>
+	body{
+		background-color: #638CB4;
+	}
+</style>
+{% block content %}
+<body>
+    <form action="{% url 'login' %}", method="post">
+
+    {% csrf_token %}
+
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card shadow-2-strong" style="border-radius: 1rem;">
+          <div class="card-body p-5 text-center">
+
+            <h3 class="mb-5">Sign in</h3>
+              {% if form.errors %}
+                <p>Please enter a correct username and password. Note that both fields may be case-sensitive.</p>
+              {% endif %}
+              <input class="form-control form-control-lg" type="text" placeholder="Username" {{ form.username }}
+              <br>
+              <input class="form-control form-control-lg" type="password" placeholder="Password" {{ form.password }}
+              <br>
+            <button class="btn btn-primary btn-lg btn-block" type="submit">Submit</button>
+
+            <hr class="my-4">
+
+    </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+
+
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
