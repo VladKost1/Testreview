@@ -9,11 +9,11 @@ from django.urls import reverse_lazy, reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from faker import Faker
 import csv
 
 
 # Create your views here.
-
 class DataColumnListView(View):
     def get(self, request):
         user_id = request.user.id
@@ -73,7 +73,7 @@ class DataColumnCreateView(CreateView):
     template_name = 'data_column_create.html'
 
     def get_success_url(self):
-        return reverse_lazy('data_detail', kwargs={'schema_id': self.kwargs['data_schema_id']})
+        return reverse_lazy('data_list')
 
     def form_valid(self, form):
         data_schema = get_object_or_404(DataSchema, pk=self.kwargs['data_schema_id'])
@@ -123,10 +123,58 @@ class DataSchemaDownloadView(View):
         # write column headers with order index
         columns = schema.datacolumn.all().order_by('order_index')
         writer = csv.writer(response)
-        writer.writerow(['Column_name', 'Column_type', 'Range_start', 'Range_end'])
-        columns_fields = columns.values_list('column_name', 'column_type', 'range_start', 'range_end')
-        for column in columns_fields:
-            writer.writerow(column)
+        writer.writerow([column.column_name for column in columns])
+        fake = Faker()
+        for i in range(num_rows):
+            row_data = []
+            for column in columns:
+                if column.column_type == 'full_name':
+                    row_data.append(fake.name())
+                elif column.column_type == 'job':
+                    row_data.append(fake.job())
+                elif column.column_type == 'email':
+                    row_data.append(fake.email())
+                elif column.column_type == 'domain_name':
+                    row_data.append(fake.domain_name())
+                elif column.column_type == 'phone_number':
+                    row_data.append(fake.phone_number())
+                elif column.column_type == 'company_name':
+                    row_data.append(fake.company())
+                elif column.column_type == 'text':
+                    row_data.append(fake.text())
+                elif column.column_type == 'integer':
+                    row_data.append(fake.random_int(min=column.range_start, max=column.range_end))
+                elif column.column_type == 'address':
+                    row_data.append(fake.address())
+                elif column.column_type == 'date':
+                    row_data.append(fake.date())
+            writer.writerow(row_data)
         return response
 
+
+
+
+
+# def generate_csv(request):
+#     response = HttpResponse(content_type='text/csv')
+#     response['Content-Disposition'] = 'attachment; filename="people.csv"'
+#
+#     writer = csv.writer(response)
+#     writer.writerow(['Name', 'Email', 'Phone', 'Address', 'Date of Birth'])
+#
+#     fake = Faker()
+#
+#     for i in range(100):
+#         name = fake.name()
+#         email = fake.email()
+#         phone = fake.phone_number()
+#         address = fake.address()
+#         date_of_birth = fake.date_of_birth(minimum_age=18, maximum_age=90)
+#
+#         writer.writerow([name, email, phone, address, date_of_birth.strftime('%Y-%m-%d')])
+#
+#         person = Person(name=name, email=email, phone=phone, address=address, date_of_birth=date_of_birth)
+#         person.save()
+#
+#     return response
 

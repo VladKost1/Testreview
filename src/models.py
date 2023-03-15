@@ -54,5 +54,4 @@ class DataColumn(BaseModel):
     def __str__(self):
         return self.column_name
 
-    def generate_data(self):
-        pass
+
