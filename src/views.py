@@ -120,7 +120,7 @@ class DataSchemaDownloadView(View):
 
         # get number of rows from request
         num_rows = int(request.GET.get('num_rows', 10))
-        # write column headers with order index
+
         columns = schema.datacolumn.all().order_by('order_index')
         writer = csv.writer(response)
         writer.writerow([column.column_name for column in columns])
@@ -151,30 +151,4 @@ class DataSchemaDownloadView(View):
             writer.writerow(row_data)
         return response
 
-
-
-
-
-# def generate_csv(request):
-#     response = HttpResponse(content_type='text/csv')
-#     response['Content-Disposition'] = 'attachment; filename="people.csv"'
-#
-#     writer = csv.writer(response)
-#     writer.writerow(['Name', 'Email', 'Phone', 'Address', 'Date of Birth'])
-#
-#     fake = Faker()
-#
-#     for i in range(100):
-#         name = fake.name()
-#         email = fake.email()
-#         phone = fake.phone_number()
-#         address = fake.address()
-#         date_of_birth = fake.date_of_birth(minimum_age=18, maximum_age=90)
-#
-#         writer.writerow([name, email, phone, address, date_of_birth.strftime('%Y-%m-%d')])
-#
-#         person = Person(name=name, email=email, phone=phone, address=address, date_of_birth=date_of_birth)
-#         person.save()
-#
-#     return response
 
